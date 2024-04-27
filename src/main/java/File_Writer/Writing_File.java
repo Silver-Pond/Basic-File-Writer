@@ -8,6 +8,9 @@ import Encryption.Encrypting;
 
 import javax.swing.*;
 import java.io.*;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
+import java.nio.channels.OverlappingFileLockException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -109,7 +112,27 @@ public class Writing_File
             }
         }
         //Set file to readable.
-        file.setWritable(true,true);
+        if(time == LocalTime.MIDNIGHT)
+        {
+            try
+            {
+                //Use the file channel to create a lock on the file.
+                FileChannel channel = new RandomAccessFile(file, "rw").getChannel();
+                //This method blocks until it can retrieve the lock.
+                FileLock lock = channel.lock();
+                // Try acquiring the lock without blocking. This method returns
+                // null or throws an exception if the file is already locked.
+                try {
+                    lock = channel.tryLock();
+                } catch (OverlappingFileLockException e) {
+                    // File is already locked in this thread or virtual machine
+                }
+
+            } catch (IOException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
 
         //Goodbye message.
         JOptionPane.showMessageDialog(null,"Thank You For Your Service :)");
