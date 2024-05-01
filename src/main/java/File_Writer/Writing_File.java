@@ -8,9 +8,6 @@ import Encryption.Encrypting;
 
 import javax.swing.*;
 import java.io.*;
-import java.nio.channels.FileChannel;
-import java.nio.channels.FileLock;
-import java.nio.channels.OverlappingFileLockException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -113,6 +110,7 @@ public class Writing_File
         }
         //Set file to readable.
         file.setReadOnly();
+
         //Goodbye message.
         JOptionPane.showMessageDialog(null,"Thank You For Your Service :)");
     }
